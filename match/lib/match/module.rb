@@ -15,7 +15,7 @@ module Match
   end
 
   def self.storage_modes
-    return %w(git google_cloud s3 gitlab_secure_files)
+    return %w(git google_cloud s3 gitlab_secure_files vault)
   end
 
   def self.profile_type_sym(type)

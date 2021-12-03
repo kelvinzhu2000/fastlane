@@ -57,6 +57,11 @@ module Match
         s3_object_prefix: params[:s3_object_prefix].to_s,
         gitlab_project: params[:gitlab_project],
         gitlab_host: params[:gitlab_host],
+        vault_address: params[:vault_address].to_s,
+        vault_match_path: params[:vault_match_path].to_s,
+        vault_token: params[:vault_token].to_s,
+        vault_path: params[:vault_path].to_s,
+        vault_mount: params[:vault_mount].to_s,
         team_id: params[:team_id] || Spaceship::ConnectAPI.client.portal_team_id
       })
       self.storage.download

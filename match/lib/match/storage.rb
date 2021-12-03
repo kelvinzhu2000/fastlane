@@ -3,6 +3,7 @@ require_relative 'storage/git_storage'
 require_relative 'storage/google_cloud_storage'
 require_relative 'storage/s3_storage'
 require_relative 'storage/gitlab_secure_files'
+require_relative 'storage/vault_storage'
 
 module Match
   module Storage
@@ -20,6 +21,9 @@ module Match
           },
           "gitlab_secure_files" => lambda { |params|
             return Storage::GitLabSecureFiles.configure(params)
+          },
+          "vault" => lambda { |params|
+            return Storage::VaultStorage.configure(params)
           }
         }
       end

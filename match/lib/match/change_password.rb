@@ -7,16 +7,16 @@ module Match
   # These functions should only be used while in (UI.) interactive mode
   class ChangePassword
     def self.update(params: nil)
-      if params[:storage_mode] != "git"
+      if params[:storage_mode] != "git" && params[:storage_mode] != "vault"
         # Only git supports changing the password
         # All other storage options will most likely use more advanced
         # ways to encrypt files
-        UI.user_error!("Only git-based match allows you to change your password, current `storage_mode` is #{params[:storage_mode]}")
+        UI.user_error!("Only [git, vault]-based match allows you to change your password, current `storage_mode` is #{params[:storage_mode]}")
       end
 
       ensure_ui_interactive
 
-      new_password = FastlaneCore::Helper.ask_password(message: "New passphrase for Git Repo: ", confirm: true)
+      new_password = FastlaneCore::Helper.ask_password(message: "New passphrase for Match Datastore: ", confirm: true)
 
       # Choose the right storage and encryption implementations
       storage = Storage.for_mode(params[:storage_mode], {
@@ -26,7 +26,12 @@ module Match
         git_branch: params[:git_branch],
         git_full_name: params[:git_full_name],
         git_user_email: params[:git_user_email],
-        clone_branch_directly: params[:clone_branch_directly]
+        clone_branch_directly: params[:clone_branch_directly],
+        vault_address: params[:vault_address],
+        vault_match_path: params[:vault_match_path],
+        vault_token: params[:vault_token],
+        vault_path: params[:vault_path],
+        vault_mount: params[:vault_mount]
       })
       storage.download
 
