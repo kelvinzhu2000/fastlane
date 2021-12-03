@@ -22,6 +22,10 @@ module Match
           },
           "gitlab_secure_files" => lambda { |params|
             return nil
+          },
+          "vault" => lambda { |params|
+            params[:keychain_name] = params[:path]
+            return Encryption::OpenSSL.configure(params)
           }
         }
       end

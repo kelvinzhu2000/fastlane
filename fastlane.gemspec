@@ -109,4 +109,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency('xcodeproj', '>= 1.13.0', '< 2.0.0') # Modify Xcode projects
   spec.add_dependency('xcpretty-travis-formatter', '>= 0.0.3', '< 2.0.0')
   spec.add_dependency('xcpretty', '~> 0.3.0') # prettify xcodebuild output
+  spec.add_dependency('vault', '~> 0.16.0') # Used for Vault storage in fastlane match
 end

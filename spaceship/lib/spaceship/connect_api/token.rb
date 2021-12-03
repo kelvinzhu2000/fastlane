@@ -42,8 +42,10 @@ module Spaceship
         missing_keys << 'key_id' unless json.key?(:key_id)
         missing_keys << 'key' unless json.key?(:key)
 
-        unless missing_keys.empty?
-          raise "App Store Connect API key JSON is missing field(s): #{missing_keys.join(', ')}"
+        if ENV['FASTLANE_SPACESHIP_OVERRIDE'] == nil
+          unless missing_keys.empty?
+            raise "App Store Connect API key JSON is missing field(s): #{missing_keys.join(', ')}"
+          end
         end
 
         self.create(**json)

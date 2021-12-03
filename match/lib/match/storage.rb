@@ -3,6 +3,7 @@ require_relative 'storage/git_storage'
 require_relative 'storage/google_cloud_storage'
 require_relative 'storage/s3_storage'
 require_relative 'storage/gitlab_secure_files'
+require_relative 'storage/vault_storage'
 
 module Match
   module Storage
@@ -57,19 +58,10 @@ module Match
             })
           },
           "gitlab_secure_files" => lambda { |params|
-            return Storage::GitLabSecureFiles.configure({
-              gitlab_host: params[:gitlab_host],
-              gitlab_project: params[:gitlab_project],
-              git_url: params[:git_url], # enables warning about unnecessary git_url
-              job_token: params[:job_token],
-              private_token: params[:private_token],
-              readonly: params[:readonly],
-              username: params[:username],
-              team_id: params[:team_id],
-              team_name: params[:team_name],
-              api_key_path: params[:api_key_path],
-              api_key: params[:api_key]
-            })
+            return Storage::GitLabSecureFiles.configure(params)
+          },
+          "vault" => lambda { |params|
+            return Storage::VaultStorage.configure(params)
           }
         }
       end
