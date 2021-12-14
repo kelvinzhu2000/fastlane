@@ -26,7 +26,9 @@ module Fastlane
       end
 
       def delete_file(vault_mount, vault_path, file_path)
-        client.kv(vault_mount).delete("#{vault_path}/#{file_path}")
+        # throw nope
+        raise "Vault Delete operation untested at this time. Will not delete."
+        #client.kv(vault_mount).delete("#{vault_path}/#{file_path}")
       end
 
       def list_secrets_recurse(vault_mount, vault_path, base_path)
