@@ -86,15 +86,19 @@ module Match
         # No existing working directory, creating a new one now
         self.working_directory = Dir.mktmpdir
 
-        vault_client.list_secrets!(vault_path).each do |object|
-          file_path = object.name # e.g. "N8X438SEU2/certs/distribution/XD9G7QCACF.cer"
-
+        vault_client.list_secrets!(self.vault_mount, vault_path).each do |object|
+          file_path = object#.name # e.g. "N8X438SEU2/certs/distribution/XD9G7QCACF.cer"
           download_path = File.join(self.working_directory, file_path)
 
           FileUtils.mkdir_p(File.expand_path("..", download_path))
           UI.verbose("Downloading file from Vault '#{file_path}' on path #{self.vault_path}")
-
-          object.download_file(download_path)
+          data_obtained = vault_client.download_file(self.vault_mount, vault_path, file_path)
+          if data_obtained != nil
+            FileUtils.touch(download_path)
+            File.open(download_path) do |opened|
+              File.write(opened, data_obtained)
+            end
+          end
         end
         UI.verbose("Successfully downloaded files from Vault to #{self.working_directory}")
       end
@@ -109,23 +113,17 @@ module Match
         # `files_to_upload` is an array of files that need to be uploaded to Vault
         # Those doesn't mean they're new, it might just be they're changed
         # Either way, we'll upload them using the same technique
-
-        print("HENLO\n")
-        print("UP: #{vault_path}\n")
-        print("HENLO\n")
-
         files_to_upload.each do |current_file|
-          print("HENLO---\n")
-          print("UP EACH: #{current_file}\n")
-          print("HENLO---\n")
           # Go from
           #   "/var/folders/px/bz2kts9n69g8crgv4jpjh6b40000gn/T/d20181026-96528-1av4gge/:team_id/profiles/development/Development_me.mobileprovision"
           # to
           #   "profiles/development/Development_me.mobileprovision"
           #
-          target_path = current_file.gsub(self.working_directory, "")
-          UI.verbose("Uploading '#{target_path}' to '#{self.vault_path}' in Vault Storage...")
-          vault_client.upload_file(self.vault_path, target_path, current_file)
+          File.open(current_file, mode: "r") do |opened|
+            target_path = current_file.gsub(self.working_directory, "")
+            UI.verbose("Uploading '#{target_path}' to '#{self.vault_path}' in Vault Storage...")
+            vault_client.upload_file(self.vault_mount, self.vault_path, target_path, opened)
+          end
         end
       end
 
@@ -133,7 +131,7 @@ module Match
         files_to_delete.each do |current_file|
           target_path = current_file.gsub(self.working_directory, "")
           UI.verbose("Deleting '#{target_path}' from Vault Storage...")
-          vault_client.delete_file(target_path)
+          vault_client.delete_file(self.vault_mount, self.vault_path, target_path)
         end
       end
 

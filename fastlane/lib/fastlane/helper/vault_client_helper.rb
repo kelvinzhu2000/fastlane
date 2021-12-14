@@ -14,33 +14,39 @@ module Fastlane
         @client = vault_client
       end
 
-      def download_file(path)
-        obj = Base64.decode64(client.logical.read(path))
+      def download_file(vault_mount, vault_path, file_path)
+        objget = client.kv(vault_mount).read("#{vault_path}/#{file_path}")
 
-        return obj
+        return Base64.decode64(objget.data[:value])
       end
 
-      def upload_file(vault_path, file_path, file_data)
-        split_path = vault_path.split("/", 2)
-        print "HENLO\n"
-        print vault_path
-        print "HENLO\n"
-        print file_path
-        print "HENLO\n"
-        print "repathed: #{split_path[0]}/data/#{split_path[1]}"
-        print "HENLO\n"
-
-        client.logical.write("#{split_path[0]}/data/#{split_path[1]}", "#{Base64.encode64(file_path)}": "#{Base64.encode64(file_data)}")
+      # file_data is an actual File object here
+      def upload_file(vault_mount, vault_path, file_path, file_data)
+        client.kv(vault_mount).write("#{vault_path}/#{file_path}", value: "#{Base64.encode64(file_data.read)}")
       end
 
-      def delete_file(path)
-        client.logical.delete(path)
+      def delete_file(vault_mount, vault_path, file_path)
+        client.kv(vault_mount).delete("#{vault_path}/#{file_path}")
       end
 
-      def list_secrets!(path)
-        obj = client.logical.list(path)
+      def list_secrets_recurse(vault_mount, vault_path, base_path)
+        arr = []
+        client.kv(vault_mount).list("#{vault_path}").each do |cliobj|
+          if cliobj.end_with?("/") then
+            arr.concat(list_secrets_recurse(vault_mount, "#{vault_path}/#{cliobj.chomp("/")}", "#{base_path}/#{cliobj.chomp("/")}"))
+          else
+            if base_path == nil
+              arr.push(cliobj)
+            else
+              arr.push("#{base_path}/#{cliobj}".reverse.chomp("/").reverse)
+            end
+          end
+        end
+        return arr
+      end
 
-        return obj
+      def list_secrets!(vault_mount, vault_path)
+        return list_secrets_recurse(vault_mount, vault_path, nil)
       end
 
       private
