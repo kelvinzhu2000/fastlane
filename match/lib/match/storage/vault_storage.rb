@@ -87,6 +87,9 @@ module Match
         self.working_directory = Dir.mktmpdir
 
         vault_client.list_secrets!(self.vault_mount, vault_path).each do |object|
+          if object == nil
+            next
+          end
           file_path = object#.name # e.g. "N8X438SEU2/certs/distribution/XD9G7QCACF.cer"
           download_path = File.join(self.working_directory, file_path)
 
@@ -110,6 +113,9 @@ module Match
       end
 
       def upload_files(files_to_upload: [], custom_message: nil)
+        if readonly
+          raise
+        end
         # `files_to_upload` is an array of files that need to be uploaded to Vault
         # Those doesn't mean they're new, it might just be they're changed
         # Either way, we'll upload them using the same technique
@@ -128,6 +134,9 @@ module Match
       end
 
       def delete_files(files_to_delete: [], custom_message: nil)
+        if readonly
+          raise
+        end
         files_to_delete.each do |current_file|
           target_path = current_file.gsub(self.working_directory, "")
           UI.verbose("Deleting '#{target_path}' from Vault Storage...")
