@@ -114,7 +114,7 @@ module Match
 
       def upload_files(files_to_upload: [], custom_message: nil)
         if readonly
-          raise
+          #raise
         end
         # `files_to_upload` is an array of files that need to be uploaded to Vault
         # Those doesn't mean they're new, it might just be they're changed
