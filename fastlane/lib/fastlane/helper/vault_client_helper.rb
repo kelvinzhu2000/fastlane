@@ -17,8 +17,14 @@ module Fastlane
 
       def download_file(vault_mount, vault_path, file_path)
         objget = client.kv(vault_mount).read("#{vault_path}/#{MATCH_PATH}/#{file_path}")
-
-        return Base64.decode64(objget.data[:value])
+        if objget != nil
+          # The following can happen in cases where previous secrets, or path bootstrapping, has occured.
+          #  Hopefully this edge case does not get triggered.
+          if objget.data.key?("value")
+            return Base64.decode64(objget.data[:value])
+          end
+        end
+        return nil
       end
 
       # file_data is an actual File object here

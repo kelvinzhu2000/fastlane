@@ -86,7 +86,14 @@ module Match
         # No existing working directory, creating a new one now
         self.working_directory = Dir.mktmpdir
 
-        vault_client.list_secrets!(self.vault_mount, vault_path).each do |object|
+        secrets_list = vault_client.list_secrets!(self.vault_mount, vault_path)
+        if secrets_list == nil
+          UI.important("No secrets present in '#{vault_path}', in Vault path '#{self.vault_mount}'.")
+          UI.important("This can happen if Vault was never used before.")
+          return
+        end
+
+        secrets_list.each do |object|
           if object == nil
             next
           end
