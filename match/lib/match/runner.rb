@@ -186,7 +186,7 @@ module Match
         end
 
         if Helper.mac?
-          UI.message("Installing certificate...")
+          UI.message("Installing certificate ['#{cert_path}']...")
 
           # Only looking for cert in "custom" (non login.keychain) keychain
           # Doing this for backwards compatibility
@@ -195,7 +195,6 @@ module Match
           if FastlaneCore::CertChecker.installed?(cert_path, in_keychain: keychain_name)
             UI.verbose("Certificate '#{File.basename(cert_path)}' is already installed on this machine")
           else
-            UI.message("Attempting to import '#{cert_path}' into the keychain.")
             Utils.import(cert_path, params[:keychain_name], password: params[:keychain_password])
 
             # Import the private key
