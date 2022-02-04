@@ -12,6 +12,7 @@ module Match
     # Store the code signing identities on AWS S3
     class VaultStorage < Interface
       attr_reader :vault_address
+      attr_reader :vault_match_path
       attr_reader :vault_token
       attr_reader :vault_path
       attr_reader :vault_mount
