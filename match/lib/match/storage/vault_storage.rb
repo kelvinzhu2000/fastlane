@@ -53,7 +53,8 @@ module Match
                      api_key: nil)
         @vault_mount = vault_mount
         @vault_path = vault_path
-        @vault_client = Fastlane::Helper::VaultClientHelper.new(address: vault_address, token: vault_token)
+        @vault_match_path = vault_match_path
+        @vault_client = Fastlane::Helper::VaultClientHelper.new(address: vault_address, token: vault_token, v_match_path: vault_match_path)
         @readonly = readonly
         @username = username
         @team_id = team_id

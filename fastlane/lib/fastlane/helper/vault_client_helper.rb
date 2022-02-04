@@ -9,12 +9,12 @@ module Fastlane
       attr_reader :match_path
       attr_reader :token
 
-      def initialize(address: nil, token: nil, vault_client: nil, vault_match_path: nil)
+      def initialize(address: nil, token: nil, vault_client: nil, v_match_path: nil)
         @address = address
         @token = token
 
         @client = vault_client
-        @match_path = vault_match_path
+        @match_path = v_match_path
       end
 
       def download_file(vault_mount, vault_path, file_path)
