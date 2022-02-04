@@ -54,6 +54,7 @@ module Match
         s3_bucket: params[:s3_bucket],
         s3_object_prefix: params[:s3_object_prefix],
         vault_address: params[:vault_address],
+        vault_match_path: params[:vault_match_path],
         vault_token: params[:vault_token],
         vault_path: params[:vault_path],
         vault_mount: params[:vault_mount],

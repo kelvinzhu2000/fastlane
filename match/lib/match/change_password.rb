@@ -28,6 +28,7 @@ module Match
         git_user_email: params[:git_user_email],
         clone_branch_directly: params[:clone_branch_directly],
         vault_address: params[:vault_address],
+        vault_match_path: params[:vault_match_path],
         vault_token: params[:vault_token],
         vault_path: params[:vault_path],
         vault_mount: params[:vault_mount]

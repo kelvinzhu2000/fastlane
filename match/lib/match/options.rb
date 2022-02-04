@@ -218,11 +218,15 @@ module Match
                                      description: "Prefix to be used on all objects uploaded to S3",
                                      optional: true),
 
-        # Storage: Vault
+        # Storage: Vault 
         FastlaneCore::ConfigItem.new(key: :vault_address,
                                      env_name: "MATCH_VAULT_ADDRESS",
                                      description: "Address of the Vault server",
                                      optional: true, default_value: nil),
+        FastlaneCore::ConfigItem.new(key: :vault_match_path,
+                                     env_name: "MATCH_VAULT_MATCH_PATH",
+                                     description: "Fastlane Match Subpath on the Vault server",
+                                     optional: true, default_value: "match"),
         FastlaneCore::ConfigItem.new(key: :vault_token,
                                      env_name: "MATCH_VAULT_TOKEN",
                                      description: "Vault access token",

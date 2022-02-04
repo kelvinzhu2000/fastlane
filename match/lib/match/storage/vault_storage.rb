@@ -26,6 +26,7 @@ module Match
       def self.configure(params)
         return self.new(
           vault_address: params[:vault_address],
+          vault_match_path: params[:vault_match_path],
           vault_token: params[:vault_token],
           vault_path: params[:vault_path],
           vault_mount: params[:vault_mount],
@@ -39,6 +40,7 @@ module Match
       end
 
       def initialize(vault_address: nil,
+                     vault_match_path: nil,
                      vault_token: nil,
                      vault_path: nil,
                      vault_mount: nil,
