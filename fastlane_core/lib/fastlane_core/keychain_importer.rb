@@ -11,8 +11,9 @@ module FastlaneCore
 
       command = "security import #{path.shellescape} -k '#{keychain_path.shellescape}'"
       command << password_part
-      command << " -T /usr/bin/codesign" # to not be asked for permission when running a tool like `gym` (before Sierra)
+      command << " -T /usr/bin/codesign"     # to not be asked for permission when running a tool like `gym` (before Sierra)
       command << " -T /usr/bin/security"
+      command << " -T /usr/bin/pkgbuild"     # to not be asked for permission when using an installer cert for macOS
       command << " -T /usr/bin/productbuild" # to not be asked for permission when using an installer cert for macOS
       command << " 1> /dev/null" unless output
 
