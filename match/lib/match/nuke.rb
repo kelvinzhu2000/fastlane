@@ -54,6 +54,7 @@ module Match
         s3_secret_access_key: params[:s3_secret_access_key].to_s,
         s3_bucket: params[:s3_bucket].to_s,
         vault_address: params[:vault_address].to_s,
+        vault_match_path: params[:vault_match_path].to_s,
         vault_token: params[:vault_token].to_s,
         vault_path: params[:vault_path].to_s,
         vault_mount: params[:vault_mount].to_s,

@@ -4,26 +4,28 @@ require 'base64'
 module Fastlane
   module Helper
     class VaultClientHelper
-      MATCH_PATH = "match"
+      #MATCH_PATH = "match"
       attr_reader :address
+      attr_reader :match_path
       attr_reader :token
 
-      def initialize(address: nil, token: nil, vault_client: nil)
+      def initialize(address: nil, token: nil, vault_client: nil, v_match_path: nil)
         @address = address
         @token = token
 
         @client = vault_client
+        @match_path = v_match_path
       end
 
       def download_file(vault_mount, vault_path, file_path)
-        objget = client.kv(vault_mount).read("#{vault_path}/#{MATCH_PATH}/#{file_path}")
+        objget = client.kv(vault_mount).read("#{vault_path}/#{match_path}/#{file_path}")
 
         return Base64.decode64(objget.data[:value])
       end
 
       # file_data is an actual File object here
       def upload_file(vault_mount, vault_path, file_path, file_data)
-        client.kv(vault_mount).write("#{vault_path}/#{MATCH_PATH}/#{file_path}", value: "#{Base64.encode64(file_data.read)}")
+        client.kv(vault_mount).write("#{vault_path}/#{match_path}/#{file_path}", value: "#{Base64.encode64(file_data.read)}")
       end
 
       def delete_file(vault_mount, vault_path, file_path)
@@ -52,7 +54,7 @@ module Fastlane
       end
 
       def list_secrets!(vault_mount, vault_path)
-        return list_secrets_recurse(vault_mount, "#{vault_path}/#{MATCH_PATH}", nil)
+        return list_secrets_recurse(vault_mount, "#{vault_path}/#{match_path}", nil)
       end
 
       private

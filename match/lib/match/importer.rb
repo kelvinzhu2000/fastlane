@@ -32,6 +32,7 @@ module Match
         google_cloud_keys_file: params[:google_cloud_keys_file].to_s,
         google_cloud_project_id: params[:google_cloud_project_id].to_s,
         vault_address: params[:vault_address],
+        vault_match_path: params[:vault_match_path],
         vault_token: params[:vault_token],
         vault_path: params[:vault_path],
         vault_mount: params[:vault_mount],
