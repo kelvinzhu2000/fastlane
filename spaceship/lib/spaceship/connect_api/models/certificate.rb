@@ -54,9 +54,11 @@ module Spaceship
       def valid?
         puts("-------------------------------------------------------------------------------------".green)
         puts(display_name)
-        puts(name)
         puts("-------------------------------------------------------------------------------------".green)
-        Time.parse(expiration_date) > Time.now
+        if expiration_date.nil?
+          return false
+        end
+        return (Time.parse(expiration_date) > Time.now)
       end
 
       # Create a new cert signing request that can be used to
