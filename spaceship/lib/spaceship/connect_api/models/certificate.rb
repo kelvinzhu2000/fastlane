@@ -52,6 +52,10 @@ module Spaceship
       end
 
       def valid?
+        puts("-------------------------------------------------------------------------------------".green)
+        puts(display_name)
+        puts(name)
+        puts("-------------------------------------------------------------------------------------".green)
         Time.parse(expiration_date) > Time.now
       end
 
